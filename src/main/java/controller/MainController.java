@@ -21,4 +21,5 @@ public class MainController extends Controller {
           renderFreeMarker("login.ftl");
       }
   }
+  
 }
