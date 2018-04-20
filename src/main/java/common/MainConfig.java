@@ -9,7 +9,9 @@ import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.template.Engine;
 import controller.MainController;
+import controller.StudentController;
 import jfinal.ext.freemarker.FreemarkerHelper;
+import model._MappingKit;
 
 public class MainConfig extends JFinalConfig {
     @Override
@@ -30,7 +32,8 @@ public class MainConfig extends JFinalConfig {
         routes.setBaseViewPath("/template");
         /*注册一个路由   /开头的url由MainController处理，viewPath参数设置该控制器的模板子目录
         从BaseViewPath开始的路径 默认为controllerKey*/
-        routes.add("/", MainController.class, "");
+        routes.add("/", MainController.class);
+        routes.add("/student", StudentController.class);
     }
 
     @Override
@@ -40,7 +43,7 @@ public class MainConfig extends JFinalConfig {
 
     @Override
     public void configPlugin(Plugins plugins) {
-        /*
+
 
         //从myconfig.properties中读取数据库jdbc连接信息 建立一个Druid数据库连接池插件
         DruidPlugin dp = new DruidPlugin(getProperty("jdbcUrl"),
@@ -53,9 +56,8 @@ public class MainConfig extends JFinalConfig {
         //设置SQL方言为MySQL
         arp.setDialect(new MysqlDialect());
         plugins.add(arp);
+       _MappingKit.mapping(arp);
 
-
-        */
     }
 
     @Override
