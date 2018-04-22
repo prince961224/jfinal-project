@@ -23,7 +23,7 @@ public class StudentController extends Controller {
         student.setRemark(remark);
         student.setGender(gender);
 
-        student.save();
+      student.save();
         renderHtml("保存成功");
     }
 

@@ -34,6 +34,7 @@ public class MainConfig extends JFinalConfig {
         从BaseViewPath开始的路径 默认为controllerKey*/
         routes.add("/", MainController.class);
         routes.add("/student", StudentController.class);
+
     }
 
     @Override
