@@ -1,57 +1,62 @@
 package controller;
 
 import com.jfinal.core.Controller;
-import model.Register;
-import model.Student;
+import com.jfinal.kit.LogKit;
+import model.User;
+
+import java.util.List;
 
 public class MainController extends Controller {
 
-    public void index() {
-        renderFreeMarker("index.ftl");
+    public void index(){
+        redirect("/login");
     }
-
-
-
-//    public void loginCheck() {
-//        String username = getPara("username");
-//        String password = getPara("password");
-//        if (username.equals("admin") && password.equals("123456")) {
-//            redirect("/");
-//        } else {
-//            setAttr("errmsg", "用户名或密码错误");
-//            renderFreeMarker("login.ftl");
-//        }
-//    }
-
-    public void add() {
-        renderFreeMarker("add-student.ftl");
+    public void  main(){
+        User user=getSessionAttr("users");
+        if( user == null){
+            redirect("/login");
+        }else{
+            renderFreeMarker("../index.ftl");
+        }
     }
-//    public void login() {
-//        renderFreeMarker("login.ftl");
-//    }
-
-    public void register() {
-        renderFreeMarker("register.ftl");
-    }
-
-    public void save() {
+    public void loginCheck() {
         String username = getPara("username");
-        Integer age = getParaToInt("age");
-        String gender = getPara("gender");
-        String remark = getPara("remark");
         String password = getPara("password");
-        Register register = new Register();
-        register.setUsername(username);
-        register.setAge(age);
-        register.setRemark(remark);
-        register.setGender(gender);
-        register.setPassword(password);
-        register.save();
-        renderHtml("已经保存成功");
+        List <User> users=User.dao.find("SELECT * From t_user WHERE username=? AND password=?",username,password);
+        if (users.size()!=0) {
+            /*登陆成功*/
+            setSessionAttr("users",users.get(0));
+            redirect("/main");
+        } else {
+            setAttr("errmsg", "用户名或密码错误");
+            renderFreeMarker("../login.ftl");
+        }
+    }
+    public void login() {
+        renderFreeMarker("../login.ftl");
+        }
+    public void logout(){
+           removeSessionAttr("users");
+           redirect("/login");
+    }
+    public void register() {
+        renderFreeMarker("../register.ftl");
     }
 
+    public void registercheck(){
+     String username= getPara("username");
+     String password=getPara("password");
+     String nickname=getPara("nickname");
+     User user=new User();
+     user.setUsername(username);
+     user.setPassword(password);
+     user.setNickname(nickname);
+     if(username.isEmpty()||password.isEmpty()){
+         setAttr("errmsg","用户名或密码为空！");
+         renderFreeMarker("../register.ftl");
+     }else{
+         user.save();
+         redirect("/login");
+        }
+    }
 }
-
-
-
-
