@@ -22,7 +22,6 @@ public class StudentController extends Controller {
         student.setAge(age);
         student.setRemark(remark);
         student.setGender(gender);
-
       student.save();
         renderHtml("保存成功");
     }
