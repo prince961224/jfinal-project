@@ -15,6 +15,7 @@ public abstract class BaseStudent<M extends BaseStudent<M>> extends Model<M> imp
 	}
 	
 	public java.lang.Integer getId() {
+
 		return getInt("id");
 	}
 
