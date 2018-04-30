@@ -23,7 +23,6 @@ public class MainConfig extends JFinalConfig {
         //注册freemarker扩展标签，实现模板继承
         FreemarkerHelper.registerExtensionTag();
 
-
     }
 
     @Override
@@ -77,6 +76,6 @@ public class MainConfig extends JFinalConfig {
     public static void main(String[] args) {
         //使用Jetty运行Jfinal项目   port参数为端口默认8080， context为上下文路径
         //完整的项目URL   http://server_or_ip:port/context/controller-key
-        JFinal.start("src/main/webapp", 8080, "/", 15);
+        JFinal.start("src/main/webapp", 8080, "/");
     }
 }
