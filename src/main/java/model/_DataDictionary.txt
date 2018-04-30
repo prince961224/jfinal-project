@@ -1,0 +1,22 @@
+Table: t_student
+--------+--------------+------+-----+---------+---------
+ Field  | Type         | Null | Key | Default | Remarks 
+--------+--------------+------+-----+---------+---------
+ id     | INT(10)      | NO   | PRI |         |         
+ name   | VARCHAR(255) | YES  |     |         |         
+ gender | VARCHAR(255) | YES  |     | 男       |         
+ age    | INT(10)      | YES  |     | 20      |         
+ remark | VARCHAR(255) | YES  |     |         |         
+--------+--------------+------+-----+---------+---------
+
+Table: t_user
+----------+----------------+------+-----+---------+---------
+ Field    | Type           | Null | Key | Default | Remarks 
+----------+----------------+------+-----+---------+---------
+ id       | INT(10)        | NO   | PRI |         |         
+ username | VARBINARY(255) | YES  |     |         |         
+ password | VARBINARY(255) | YES  |     |         |         
+ nickname | VARBINARY(255) | YES  |     |         |         
+ role     | VARBINARY(255) | YES  |     |         |         
+----------+----------------+------+-----+---------+---------
+
