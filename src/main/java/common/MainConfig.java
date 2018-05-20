@@ -8,9 +8,11 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.template.Engine;
+import controller.CategoryController;
 import controller.MainController;
-import controller.StudentController;
+import controller.UserController;
 import jfinal.ext.freemarker.FreemarkerHelper;
+import model.User;
 import model._MappingKit;
 
 public class MainConfig extends JFinalConfig {
@@ -31,9 +33,9 @@ public class MainConfig extends JFinalConfig {
         routes.setBaseViewPath("/template");
         /*注册一个路由   /开头的url由MainController处理，viewPath参数设置该控制器的模板子目录
         从BaseViewPath开始的路径 默认为controllerKey*/
+        routes.add("/category", CategoryController.class);
+        routes.add("/user", UserController.class);
         routes.add("/", MainController.class);
-        routes.add("/student", StudentController.class);
-
     }
 
     @Override

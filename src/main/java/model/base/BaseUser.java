@@ -23,34 +23,62 @@ public abstract class BaseUser<M extends BaseUser<M>> extends Model<M> implement
 		return (M)this;
 	}
 	
+	public java.lang.String getUsername() {
+		return getStr("username");
+	}
 
-
-	public M setPassword(java.lang.String  password) {
+	public M setPassword(java.lang.String password) {
 		set("password", password);
 		return (M)this;
 	}
 	
-	public byte[] getPassword() {
-		return get("password");
+	public java.lang.String getPassword() {
+		return getStr("password");
 	}
 
-	public M setNickname(java.lang.String  nickname) {
+	public M setNickname(java.lang.String nickname) {
 		set("nickname", nickname);
 		return (M)this;
 	}
 	
-	public java.lang.String  getNickname() {
-
-		return get("nickname");
+	public java.lang.String getNickname() {
+		return getStr("nickname");
 	}
 
-	public M setRole(java.lang.String  role) {
-		set("role", role);
+	public M setSex(java.lang.String sex) {
+		set("sex", sex);
 		return (M)this;
 	}
 	
-	public java.lang.String  getRole() {
-		return get("role");
+	public java.lang.String getSex() {
+		return getStr("sex");
+	}
+
+	public M setAvatar(byte[] avatar) {
+		set("avatar", avatar);
+		return (M)this;
+	}
+	
+	public byte[] getAvatar() {
+		return get("avatar");
+	}
+
+	public M setEmail(java.lang.String email) {
+		set("email", email);
+		return (M)this;
+	}
+	
+	public java.lang.String getEmail() {
+		return getStr("email");
+	}
+
+	public M setAdmin(java.lang.Boolean admin) {
+		set("admin", admin);
+		return (M)this;
+	}
+	
+	public java.lang.Boolean getAdmin() {
+		return get("admin");
 	}
 
 }
