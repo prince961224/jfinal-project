@@ -1,19 +1,20 @@
 package common;
-
 import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.ext.interceptor.SessionInViewInterceptor;
+import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.template.Engine;
 import controller.CategoryController;
 import controller.MainController;
+import controller.TopicController;
 import controller.UserController;
 import jfinal.ext.freemarker.FreemarkerHelper;
-import model.User;
 import model._MappingKit;
+
 
 public class MainConfig extends JFinalConfig {
     @Override
@@ -25,6 +26,7 @@ public class MainConfig extends JFinalConfig {
         //注册freemarker扩展标签，实现模板继承
         FreemarkerHelper.registerExtensionTag();
 
+
     }
 
     @Override
@@ -35,7 +37,9 @@ public class MainConfig extends JFinalConfig {
         从BaseViewPath开始的路径 默认为controllerKey*/
         routes.add("/category", CategoryController.class);
         routes.add("/user", UserController.class);
+        routes.add("/topic", TopicController.class);
         routes.add("/", MainController.class);
+
     }
 
     @Override
@@ -50,15 +54,26 @@ public class MainConfig extends JFinalConfig {
         //从myconfig.properties中读取数据库jdbc连接信息 建立一个Druid数据库连接池插件
         DruidPlugin dp = new DruidPlugin(getProperty("jdbcUrl"),
                 getProperty("user", "root"),
-                getProperty("password", "password"));
+                getProperty("password", "root"));
+
 
         plugins.add(dp);
         //创建ActiveRecord插件
         ActiveRecordPlugin arp = new ActiveRecordPlugin(dp);
         //设置SQL方言为MySQL
         arp.setDialect(new MysqlDialect());
+
+
+        //配置arp插件的开发模式
+        arp.setDevMode(true);
+        //配置arp显示sql语句
+        arp.setShowSql(true);
         plugins.add(arp);
-       _MappingKit.mapping(arp);
+
+        _MappingKit.mapping(arp);
+
+        arp.setBaseSqlTemplatePath(PathKit.getRootClassPath());
+        arp.addSqlTemplate("sql.jtl");
 
     }
 

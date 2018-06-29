@@ -45,15 +45,6 @@ public abstract class BaseReply<M extends BaseReply<M>> extends Model<M> impleme
 		return getStr("content");
 	}
 
-	public M setReplyCount(java.lang.Integer replyCount) {
-		set("reply_count", replyCount);
-		return (M)this;
-	}
-	
-	public java.lang.Integer getReplyCount() {
-		return getInt("reply_count");
-	}
-
 	public M setPubDate(java.util.Date pubDate) {
 		set("pub_date", pubDate);
 		return (M)this;

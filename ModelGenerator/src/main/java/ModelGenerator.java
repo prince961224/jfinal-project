@@ -15,7 +15,7 @@ public class ModelGenerator {
         MysqlDataSource ds = new MysqlDataSource();
         ds.setUrl(PropKit.get("jdbcUrl"));
         ds.setUser(PropKit.get("user", "root"));
-        ds.setPassword(PropKit.get("password", "root"));
+        ds.setPassword(PropKit.get("password", "123456"));
         return ds;
     }
 

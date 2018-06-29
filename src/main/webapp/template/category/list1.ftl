@@ -8,32 +8,27 @@
             <div class="twelve wides column">
                 <table class="ui selectable inverted table">
                     <thead>
-                    <tr>
-                        <th>板块名称</th>
-                        <th>管理板块</th>
-                    </tr>
+                        <tr>
+                            <th>板块名称</th>
+                            <th>管理板块</th>
+                        </tr>
                     </thead>
                     <tbody>
                         <#list categories as category>
-                        <tr>
-                            <td>
-                                <div class="ui ribbon label">${category.name}</div>
-                                <div></div>
-                            </td>
-                            <td>
-                                <a href="${base}/category/modify/${category.id}">更新板块</a> |
-                                <a href="${base}/category/delete/${category.id}">删除板块</a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td >
+                                  <div class="ui ribbon label">${category.name}</div>
+                                </td>
+                                <td>
+                                    <a href="${base}/category/modify/${category.id}">更新板块</a> |
+                                    <a href="${base}/category/delete/${category.id}">删除板块</a>
+                                </td>
+                            </tr>
                         </#list>
-                   <#-- <div class="ui tiny image" style="width:120px;">
-                        <img class="ui avatar image"  src="${base}/images/category.png">
-                        <div style="text-align: center;">{{reply.nickname}}</div>
-                    </div>-->
                     </tbody>
                 </table>
                 <div class="ui two  blue  button">
-                    <a href="${base}/category/add" style="text-align: center;color: greenyellow " > 增加板块 </a>
+                <a href="${base}/category/add" style="text-align: center;color: greenyellow " > 增加板块 </a>
                 </div>
             </div>
         </div>
@@ -45,7 +40,7 @@
     $('#sidebar-icon').click(function () {
         $('.sidebar.menu').sidebar('toggle');
     });
-    function updateCategory() {
+ function updateCategory() {
         $('#category-form').form('validate form');
         if($('#category-form').form('is valid')){
             $.ajax({

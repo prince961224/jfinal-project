@@ -2,87 +2,107 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<#--/**使用semantic-ui**/-->
-    <script src="/scripts/jquery.min.js"></script>
-    <script src="/scripts/semantic.min.js"></script>
-    <link rel="stylesheet" href="/styles/semantic.min.css">
-    <style type="text/css">
-        .errmsg{
-            color: red;
+    <script src="${base}/scripts/jquery.min.js"></script>
+    <script src="${base}/scripts/semantic.min.js"></script>
+    <link rel="stylesheet" href="${base}/styles/semantic.min.css"/>
+    <title>注册页面</title>
+    <style>
+        .body{
+            background: #dfd7ff;
         }
+        .margintop{
+            margin-top: 100px;
+        }
+
     </style>
-    <title>欢迎来到注册页面</title>
-    <script type="text/javascript">
-        function setdatetime(){
-            var  date=new Date();
-            var  day=date.getDay();
-            var week;
-            switch(day){
-                case 0:week="星期日";break;
-                case 1:week="星期一";break;
-                case 2:week="星期二";break;
-                case 3:week="星期三";break;
-                case 4:week="星期四";break;
-                case 5:week="星期五";break;
-                case 6:week="星期六";break;
-            }
-            var hours;
-            var today;
-            if(date.getHours()<10){
-                today=date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+week+" "+"0"+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
-            }
-            else {
-                today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()  +" "+week+" "+ date.getHours()+ ":" + date.getMinutes() + ":"+date.getSeconds();
-            }
-            document.getElementById("today").innerHTML=today;
-        }
-        window.setInterval("setdatetime()", 1000);
-    </script>
+
 </head>
-<body>
-<div class="ui top attached inverted nav menu">
-    <a href="" class="item">Index</a>
-    <a href="" class="item">Campus</a>
-    <a href="" class="item">Music</a>
-    <a href="/main/login" class="item">Login</a>
-    <a href="" class="float right item" id="today"></a>
-</div>
-<div style="font-size: 25px;text-decoration-color: #DFDFDF;text-align: center;font-family: 黑体" >
-    欢迎来到XX论坛
-</div>
-<div class="ui grid container">
-    <div class="eight wides centered column">
-        <div class="ui inverted teal segment">
-            <form action="/registercheck" method="post" class="ui fluid form">
-
-                <div class="field">
-                    <label>用户名</label>
-                    <input  id="username"  type="text" name="username" placeholder="请输入用户名" autocomplete="off">
+<body class="body">
+<div class="margintop">
+    <div class="ui grid container  ">
+        <div class="eight wides  centered column" >
+            <div class="ui inverted teal segment">
+                <div class="blue">
+                    欢迎来到注册页面
                 </div>
-
-                <div class="field">
-                    <label> 密　码</label>
-                    <input  id="password"   type="password" name="password" autocomplete="off" placeholder="请输入密码">
-                </div>
-
-                <div class="field">
-                    <label>昵　称</label>
-                    <input id="nickname" type="text" name="nickname" placeholder="请输入昵称" autocomplete="off">
-                <#--备　注:<textarea id="role" name="role" cols="15" rows="10" placeholder="备注" autocomplete="off"></textarea><br/>-->
-                </div>
-
-                <div class="ui primary fluid  button" >
-                    <input type="submit" value="注册">
-                </div>
-                <div class="ui center errmsg">
-                ${errmsg!""}
-                </div>
-            </form>
+                <form  class="ui fluid form">
+                    <div class="field">
+                        <label>用户名</label>
+                        <input type="text" name="username" id="username" placeholder="请输入用户名" autocomplete="off" >
+                    </div>
+                    <div class="field">
+                        <label>密码</label>
+                        <input type="password" name="password"id="password" placeholder="请输入密码" autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <label>重复密码</label>
+                       <input type="password" name="password2"id="password2" placeholder="请再次输入密码" autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <label>昵名</label>
+                       <input type="text" name="nickname" id="nickname" placeholder="请输入昵名" autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <label>邮箱</label>
+                        <input type="text" name="email" id="email" placeholder="请输入email" autocomplete="off">
+                    </div>
+                    <div class="ui error message"></div>
+                    <a class="ui primary fluid submit button"  onclick="register()" >注册</a><br>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 </body>
+
+<script>
+    $('.ui.form').form({
+        fields:{
+            username:{
+                rules:[{
+                    type:'minLength[3]',
+                    prompt:'用户名至少包含3个字符'
+                }]
+            },
+            password:{
+                rules:[{
+                    type:'minLength[6]',
+                    prompt:'密码至少包含6个字符'
+                }]
+            },
+            password2:{
+                rules:[{
+                    type:'match[password]',
+                    prompt:'密码不一致'
+                }]
+            },
+            nickname:{
+                rules:[{
+                    type:'empty',
+                    prompt:'昵称不能为空'
+                }]
+            },
+            email:{
+                rules:[{
+                    type:'email',
+                    prompt:'电子邮件格式不正确'
+                }]
+            }
+        }
+    }).api({
+        method:'POST',
+        url:'${base}/doRegister',
+        serializeForm:true,
+        success:function (res) {
+            if(res.success){
+                alert(res.message);
+                window.location.href='${base}/login'
+            }else{
+                $('.ui.form').form('add errors',[res.message]);
+            }
+        }
+    })
+</script>
 </html>

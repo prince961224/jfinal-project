@@ -1,3 +1,5 @@
+<#-- @ftlvariable name="topics" type="java.util.List<model.Topic>" -->
+<#-- @ftlvariable name="categories" type="java.util.List<model.Category>" -->
 <!doctype html>
 <html lang="zh">
 <head>
@@ -5,16 +7,23 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<#--/**使用semantic-ui**/-->
     <script src="/scripts/jquery.min.js"></script>
     <script src="/scripts/semantic.min.js"></script>
     <link rel="stylesheet" href="/styles/semantic.min.css">
     <style type="text/css">
-        .errmsg{
-            color: red;
+        li{
+            display: inline;
+        }
+
+        li a{
+            color:block;
+        }
+
+        li a:hover{
+            background:turquoise;
         }
     </style>
-    <title>欢迎来到主页面</title>
+<#--显示时间和日期的scripts-->
     <script type="text/javascript">
         function setdatetime(){
             var  date=new Date();
@@ -41,33 +50,28 @@
         }
         window.setInterval("setdatetime()", 1000);
     </script>
+
+    <@block name="head"></@block>
+    <title><@block name="title"></@block></title>
+
+
 </head>
 <body>
-<div class="ui top attached inverted nav menu">
-    <a href="" class="item">Index</a>
-    <a href="" class="item">Campus</a>
-    <a href="/music_palyer" class="item">Music</a>
-    <a href="/login" class="item">Login</a>
-    <a href="" class="float right item" id="today"></a>
-</div>
-<div style="font-size: 25px;text-decoration-color: #DFDFDF;text-align: center;font-family: 黑体" >
-        尊敬的${name !""} 欢迎来到XX论坛
-</div>
-<#--
-<div class="ui grid container">
-    <div class="eight wides centered column">
-        <div class="ui inverted teal segment">
-            <form action="/main" method="post" class="ui fluid form">
-                <div>
-                <h1>hello</h1>
-                </div>
-                <div class="ui center errmsg">
-                ${errmsg!""}
-                </div>
-            </form>
-        </div>
+<nav>
+    <div class="ui inverted menu">
+        <li class="item"><a href="/login">登录</a></li>
+        <li class="item"><a href="/demo">主页</a></li>
+        <#list categories as category>
+        <li class="item"><a href="/category/${category.id}">${category.name!""}</a></li>
+        </#list>
+        <a href="" class="float right item" id="today"></a>
     </div>
-</div>-->
+    <div style="font-size: 25px;text-decoration-color: #DFDFDF;text-align: center;font-family: 黑体" >
+        欢迎来到皮皮乐论坛
+    </div>
+</nav>
+
+<@block name="content">
 <div class="ui grid container " id="main-container" style="margin-top: 20px;">
     <div class="twelve wides column">
         <div class="ui raised segment">
@@ -76,13 +80,16 @@
                 <#list topics as topic>
                     <div class="item">
                         <div class="content">
-                            <div class="header"><a href="/topic/${topic.id}">${topic.title}</a>&nbsp;&nbsp;
+                            <div class="header">
+                                <a href="/topic/${topic.id}">
+                                    ${topic.title}
+                                </a>&nbsp;&nbsp;
                                 回复:${topic.reply_count}
                             </div>
                         </div>
                         <div>
                             <div class="right floated content">
-                                <span>${topic.category_name !""}</span>
+                                <span><a href="/category/${topic.category_id}">${topic.category_name !""}</a></span>
                             </div>
                         </div>
                     </div>
@@ -92,9 +99,14 @@
     </div>
 </div>
 <div>
-    <div class="ui inverted segment" id="footer">
-        <div class="ui text center aligned container">于兴胜 @2018-520</div>
-    </div>
-</div>
+</@block>
+
+    <footer >
+        <div>
+            <div class="ui inverted segment" id="footer">
+                <div class="ui text center aligned container">宁夏大学 信息工程学院 计算机科学与技术专业 于兴胜 @2015-2019</div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

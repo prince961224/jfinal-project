@@ -54,13 +54,13 @@ public abstract class BaseTopic<M extends BaseTopic<M>> extends Model<M> impleme
 		return getStr("content");
 	}
 
-	public M setReplyCount(java.lang.Integer replyCount) {
-		set("reply_count", replyCount);
+	public M setOldReplyCount(java.lang.Integer oldReplyCount) {
+		set("old_reply_count", oldReplyCount);
 		return (M)this;
 	}
 	
-	public java.lang.Integer getReplyCount() {
-		return getInt("reply_count");
+	public java.lang.Integer getOldReplyCount() {
+		return getInt("old_reply_count");
 	}
 
 	public M setPubDate(java.util.Date pubDate) {

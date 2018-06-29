@@ -1,79 +1,110 @@
 package controller;
 
+import com.jfinal.aop.Before;
+import com.jfinal.captcha.CaptchaRender;
 import com.jfinal.core.Controller;
+import com.jfinal.ext.interceptor.POST;
+import com.jfinal.kit.HashKit;
+import com.jfinal.kit.Kv;
 import com.jfinal.kit.LogKit;
 import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Record;
-import model.Topic;
+import interceptor.CategoryNabarInterceptor;
+import interceptor.Login;
+import interceptor.LoginValidator;
 import model.User;
-
 import java.util.List;
 
+
 public class MainController extends Controller {
+    @Before(CategoryNabarInterceptor.class)
+    public void index() {
+       renderFreeMarker("parent.ftl");
+    }
+    @Before({Login.class,CategoryNabarInterceptor.class})
+    public void main() {
+        renderFreeMarker("parent.ftl");
+    }
 
-    public void index(){
-        List<Record> topics = Db.find("SELECT t_topic.*,t_category.`name` AS category_name FROM t_topic " +
-                "INNER JOIN t_category ON t_topic.category_id=t_category.`id` " +
-                "ORDER BY reply_count DESC LIMIT 1,25");
-        setAttr("topics",topics);
-        String username = getPara("name");
-        setAttr("username",username);
-        renderFreeMarker("main_layout.ftl");
-    }
-    public void  main(){
-        List<Record> topics = Db.find("SELECT t_topic.*,t_category.`name` AS category_name FROM t_topic " +
-                "INNER JOIN t_category ON t_topic.category_id=t_category.`id` " +
-                "ORDER BY reply_count DESC LIMIT 1,25");
-        setAttr("topics",topics);
-        renderFreeMarker("main_layout.ftl");
-    }
-    public void loginCheck() {
-        String username = getPara("username");
-        String password = getPara("password");
-        List <User> users=User.dao.find("SELECT * From t_user WHERE username=? AND password=?",username,password);
-        if (users.size()!=0) {
-            /*登陆成功*/
-            setAttr("name",username);
-            setSessionAttr("users",users.get(0));
-            List<Record> topics = Db.find("SELECT t_topic.*,t_category.`name` AS category_name FROM t_topic " +
-                    "INNER JOIN t_category ON t_topic.category_id=t_category.`id` " +
-                    "ORDER BY reply_count DESC LIMIT 1,25");
-            setAttr("topics",topics);
-            renderFreeMarker("main_layout.ftl");
-
-        } else {
-            setAttr("errmsg", "用户名或密码错误");
-            renderFreeMarker("login.ftl");
-        }
-    }
+   @Before(CategoryNabarInterceptor.class)
     public void login() {
         renderFreeMarker("login.ftl");
     }
-    public void logout(){
-        removeSessionAttr("users");
-        redirect("login");
+
+   @Before({POST.class, LoginValidator.class})
+    public void loginCheck() {
+        String username = getPara("username");
+        String password = getPara("password");
+        String passwordmd5 = HashKit.md5(password).toLowerCase();
+        boolean  success=false;
+        String message;
+        String sql = Db.getSql("checkLoginUser");
+        List<User> users = User.dao.find(sql, username, passwordmd5);
+
+        //登录成功
+        if (users.size() != 0) {
+            //跳转到主页面
+            redirect("/main");
+            //往session中放入一个key为username的变量，值为用户登录的用户名
+            setSessionAttr("user", users.get(0));
+            message="登陆成功";
+            success=true;
+        } else {
+            //登录失败
+            setAttr("errmsg", "用户名或密码错误");
+            message="用户名或者密码错误";
+           // renderFreeMarker("login.ftl");
+        }
+       Kv result = Kv.by("success", success).set("message", message);
+       renderJson(result);
     }
+
+    public void logout() {
+        removeSessionAttr("user");
+        redirect("/index");
+    }
+
+    @Before(CategoryNabarInterceptor.class)
     public void register() {
         renderFreeMarker("register.ftl");
     }
 
-    public void registercheck(){
-        String username= getPara("username");
-        String password=getPara("password");
-        String nickname=getPara("nickname");
-        User user=new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setNickname(nickname);
-        if(username.isEmpty()||password.isEmpty()){
-            setAttr("errmsg","用户名或密码为空！");
-            renderFreeMarker("register.ftl");
-        }else{
-            user.save();
-            redirect("login");
-        }
+
+    public void doRegister() {
+        String username = getPara("username");
+        String password = getPara("password");
+        String nickname = getPara("nickname");
+        String email = getPara("email");
+        boolean success = false;
+      if(username.isEmpty()){
+          renderHtml("用户名为空");
+          return ;
+      }else {
+          User user = new User();
+          user.setUsername(email);
+          user.setUsername(username);
+          user.setPassword(password);
+          user.setNickname(nickname);
+          try {
+              user.save();
+              success = true;
+          } catch (Exception e) {
+              LogKit.error("用户注册失败，原因是:" + e.getMessage());
+          }
+      }
+       String message = success ?"注册成功":"注册失败";
+        Kv result = Kv.by("success", success).set("message", message);
+        renderJson(result);
     }
-    public void music_palyer(){
-        renderFreeMarker("music.ftl");
+
+    public void captcha(){
+        render(
+                new CaptchaRender()
+        );
     }
+
+    @Before(CategoryNabarInterceptor.class)
+    public void demo(){
+        renderFreeMarker("demo.ftl");
+    }
+
 }
