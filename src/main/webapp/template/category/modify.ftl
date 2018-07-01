@@ -13,7 +13,7 @@
                 <div class="ui error message"></div>
                 <div class="ui field ten wide column" style="margin-bottom:339px">
                     <input type="hidden" name="id" value="${category.id}"/>
-                   <input type="button"  name="name" class="ui two primary blue button" onclick="updateCategory()" value="更新">
+                    <input type="button"  name="name" class="ui two primary blue button" onclick="updateCategory()" value="更新">
                     <a type="button" href='${base}/category/list' class="ui two red button">返回板块列表</a>
                 </div>
             </form>

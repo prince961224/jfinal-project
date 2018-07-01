@@ -30,9 +30,5 @@ public class UserController extends Controller {
     public void login(){
       renderFreeMarker("login.ftl");
     }
-    public void logincheck(){
-       String username= getPara("username");
-       String password= getPara("password");
-       String admin=getPara("admin");
-    }
+
 }

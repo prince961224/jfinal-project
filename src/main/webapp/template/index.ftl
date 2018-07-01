@@ -29,7 +29,6 @@
 
 
 <div>
-
 <#if page.getPageNumber() !=1 >
     <a href="?page=${page.getPageNumber()-1}">上一页</a>
 </#if>

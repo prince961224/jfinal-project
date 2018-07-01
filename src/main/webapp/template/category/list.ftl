@@ -49,7 +49,7 @@
         $('#category-form').form('validate form');
         if($('#category-form').form('is valid')){
             $.ajax({
-                url:'/category/update',
+                url:'${base}/category/update',
                 type:'post',
                 data:$('#category-form').serialize(),
                 success:function (res) {

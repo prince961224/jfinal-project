@@ -39,7 +39,6 @@ public class MainConfig extends JFinalConfig {
         routes.add("/user", UserController.class);
         routes.add("/topic", TopicController.class);
         routes.add("/", MainController.class);
-
     }
 
     @Override

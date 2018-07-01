@@ -11,13 +11,15 @@ import interceptor.CategoryNabarInterceptor;
 import interceptor.Login;
 import model.Category;
 import model.Topic;
+import org.omg.CORBA.INTERNAL;
+
 import java.util.List;
 
 public class CategoryController extends Controller {
    //显示板块里的所有内容：
    // @Before(Login.class)
     public void list(){
-         List<Category> categories= Category.dao.find("SELECT  * FROM t_category");
+         List<Category> categories= Category.dao.find("SELECT  * FROM t_category WHERE deleted = 0");
          setAttr("categories",categories);
          renderFreeMarker("list.ftl");
     }
@@ -49,7 +51,7 @@ public class CategoryController extends Controller {
     @Before({CategoryNabarInterceptor.class})
     public void modify(){
       Integer id=  getParaToInt(0,-1);
-      Category category=Category.dao.findById(id);
+      Category category = Category.dao.findById(id);
         if(category != null ){
             setAttr("category",category);
             renderFreeMarker("modify.ftl");
@@ -78,34 +80,38 @@ public class CategoryController extends Controller {
       String message=success ? "更新成功":"更新失败";
       Kv result = Kv.by("success", success).set("message", message);
       renderJson(result);
-
   }
   //删除
     @Before({Login.class})
     public void delete(){
         Integer id=getParaToInt(0,-1);
+        Integer deleted =1;
+        Category category = new Category();
+        category.setId(id);
+        category.setDeleted(deleted);
         Boolean success=false;
         try {
             success=true;
-           Category.dao.deleteById(id);
+            /*Category.dao.deleteById(id);*/
+            category.update();
         }catch (Exception e){
             LogKit.error("板块删除失败，原因是"+e.getMessage());
         }
-        String message=success ? "删除成功":"更新失败";
+        String message=success ? "删除成功":"删除失败";
         renderHtml(message + "</br><a href='/category/list'>返回板块列表</a>");
     }
 
+    @Before(CategoryNabarInterceptor.class)
     public void index() {
         Integer categoryId = getParaToInt(0, -1);
         Integer pageNumber = getParaToInt("page", 1);
+
         SqlPara sqlPara = Db.getSqlPara("getTopicListByCategoryId");
         sqlPara.addPara(categoryId);
+
         Page<Topic> page = Topic.dao.paginate(pageNumber, 10, sqlPara);
+
         setAttr("page", page);
-        renderFreeMarker("topic-list.ftl");
+        renderFreeMarker("topic-list1.ftl");
     }
-
-
-
-
 }

@@ -21,7 +21,6 @@
       li a:hover{
             background:turquoise;
         }
-
     </style>
     <#--显示时间和日期的scripts-->
     <script type="text/javascript">
@@ -58,7 +57,7 @@
     <div class="ui inverted menu">
        <#-- 这部分是主页和时间-->
                     <li class="item"><a href="#"></a></li>
-                    <li class="item"><a href="${base}/main">主页</a></li>
+                    <li class="item"><a href="${base}/index">主页</a></li>
                     <#list categories as category>
                     <li class="item"><a href="${base}/category/${category.id}">${category.name!""}</a></li>
                     </#list>
@@ -103,7 +102,9 @@
                         </div>
                         <div>
                             <div class="right floated content">
-                                <span><a href="${base}/category/${topic.category_id}">${topic.category_name !""}</a></span>
+                                <span>
+                                    <a href="${base}/category/${topic.category_id}">${topic.category_name !""}</a>
+                                </span>
                             </div>
                         </div>
                     </div>
