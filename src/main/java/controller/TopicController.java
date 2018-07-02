@@ -1,23 +1,22 @@
 package controller;
 
+
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
-import com.jfinal.ext.interceptor.POST;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.LogKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.SqlPara;
-import com.sun.prism.shader.Solid_TextureSecondPassLCD_AlphaTest_Loader;
-import interceptor.CategoryFormValidator;
 import interceptor.CategoryNabarInterceptor;
 import interceptor.Login;
+import interceptor.ReplyFormValidator;
 import interceptor.TopicFormValidator;
-import model.Category;
 import model.Reply;
 import model.Topic;
 import model.User;
-import org.omg.PortableInterceptor.USER_EXCEPTION;
+
+
 
 import java.util.List;
 
@@ -34,7 +33,19 @@ public class TopicController extends Controller {
         Page<Reply> page = Reply.dao.paginate(pageNumber, 10, sqlPara);
         setAttr("page",page);
 
-        renderFreeMarker("view1.ftl");
+        User user = getSessionAttr("user");
+        Integer admin = 0;
+        Integer userId =0;
+        if(user == null ){
+            setAttr("admin",admin);
+            setAttr("userId",userId);
+        }else{
+            userId = user.getId();
+            admin=user.getAdmin();
+            setAttr("admin",admin);
+            setAttr("userId",userId);
+        }
+        renderFreeMarker("view.ftl");
     }
     public void reply(){
         Integer userId = getParaToInt("user_id", -1);
@@ -62,11 +73,12 @@ public class TopicController extends Controller {
     }*/
     @Before({Login.class,CategoryNabarInterceptor.class})
     public void modify(){
-        Integer topic_id = getParaToInt(0, -1);
-        User user = getSessionAttr("user");
-        String sql="SELECT t_user.* FROM t_user WHERE t_user.`admin`=1 AND t_user.`id`= ? ";
-        List<User> users = User.dao.find(sql,user.getId());
+            Integer topic_id = getParaToInt(0, -1);
+            User user = getSessionAttr("user");
+            String sql="SELECT t_user.* FROM t_user WHERE t_user.`admin`=1 AND t_user.`id`= ? ";
+            List<User> users = User.dao.find(sql,user.getId());
         Topic topics = Topic.dao.findById(topic_id);
+
         if(users.isEmpty()){
             renderHtml("对不起，你没有这个权限！");
         }else{
@@ -104,9 +116,11 @@ public class TopicController extends Controller {
         String sql="SELECT t_user.* FROM t_user WHERE t_user.`admin`= 1 AND t_user.`id`= ? ";
         List<User> users = User.dao.find(sql,user.getId());
         //删除贴子（相当于更新操作）
+
         Topic topic = new Topic();
         topic.setId(topic_id);
         topic.setDeleted(deleted);
+
         //删除成功地标志
         Boolean success=false;
         if( users.isEmpty() ){
@@ -119,11 +133,55 @@ public class TopicController extends Controller {
                      }catch (Exception e){
                         LogKit.error("板块删除失败，原因是"+e.getMessage());
                 }
+            String message=success ? "删除成功":"删除失败";
+            renderHtml(message + "</br><a href='/index '>返回主页</a>");
         }
-        String message=success ? "删除成功":"删除失败";
-        renderHtml(message + "</br><a href='/index '>返回主页</a>");
     }
-
-
-
+    @Before({CategoryNabarInterceptor.class})
+    public void reply_modify(){
+        Integer reply_id = getParaToInt(0, -1);
+       String sql ="SELECT t_reply.* FROM  t_reply WHERE t_reply.`id`= ?";
+        Reply reply = Reply.dao.findById(sql,reply_id);
+        if(reply != null ){
+            setAttr("reply",reply);
+            renderFreeMarker("reply_modify.ftl");
+        }else{
+            renderHtml("<h3>回帖内容不存在！！</h3>");
+        }
+    }
+    @Before({Login.class,ReplyFormValidator.class})
+    public void reply_update(){
+        String contents = getPara("contents");
+        Integer reply_id = getParaToInt("reply_id");
+        Reply reply = new Reply();
+        reply.setId(reply_id);
+        reply.setContent(contents);
+        Boolean success = false;
+        try {
+            reply.update();
+            success =true;
+        }catch (Exception e){
+            LogKit.error("内容更新失败，原因是"+e.getMessage());
+        }
+        String message = success ? "更新成功":"更新失败";
+        Kv result = Kv.by("success", success).set("message", message);
+        renderJson(result);
+    }
+    @Before({Login.class})
+   public  void reply_delete(){
+        Integer reply_id = getParaToInt(0,-1);
+        Integer deleted =1;
+        Reply reply = new Reply();
+        reply.setId(reply_id);
+        reply.setDeleted(deleted);
+        Boolean success=false;
+        try {
+            reply.update();
+            success=true;
+        }catch (Exception e){
+            LogKit.error("删除失败，原因是"+e.getMessage());
+        }
+            String message=success ? "删除成功":"删除失败";
+            renderHtml(message + "</br><a href='/index'>返回主页</a>");
+    }
 }

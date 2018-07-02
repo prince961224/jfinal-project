@@ -4,7 +4,7 @@ Table: t_category
 ---------+-------------+------+-----+---------+---------
  id      | INT(10)     | NO   | PRI |         | 板块ID    
  name    | VARCHAR(50) | YES  |     |         | 板块名称    
- deleted | BIT         | YES  |     | 0       | 删除标志    
+ deleted | INT(10)     | YES  |     | 0       | 删除标志    
 ---------+-------------+------+-----+---------+---------
 
 Table: t_reply
@@ -16,7 +16,7 @@ Table: t_reply
  topic_id | INT(10)       | NO   |     |                   | 主题ID    
  content  | TEXT(65535)   | YES  |     |                   | 回帖内容    
  pub_date | TIMESTAMP(19) | NO   |     | CURRENT_TIMESTAMP | 回帖时间    
- deleted  | BIT           | NO   | PRI | 0                 | 删帖标志    
+ deleted  | INT(10)       | NO   | PRI | 0                 | 删帖标志    
 ----------+---------------+------+-----+-------------------+---------
 
 Table: t_topic
@@ -30,7 +30,7 @@ Table: t_topic
  content         | TEXT(65535)   | YES  |     |                   | 主题内容    
  old_reply_count | INT(10)       | YES  |     | 0                 | 回复数量    
  pub_date        | TIMESTAMP(19) | NO   |     | CURRENT_TIMESTAMP | 主题发布时间  
- deleted         | BIT           | YES  |     | 0                 | 删除标志    
+ deleted         | INT(10)       | YES  |     | 0                 | 删除标志    
 -----------------+---------------+------+-----+-------------------+---------
 
 Table: t_user
@@ -44,6 +44,6 @@ Table: t_user
  sex      | VARCHAR(2)           | YES  |     | 男       | 性别      
  avatar   | LONGBLOB(2147483647) | YES  |     |         | 头像      
  email    | VARCHAR(100)         | YES  |     |         | 邮箱      
- admin    | BIT                  | YES  |     | 0       | 是否是管理员  
+ admin    | INT(10)              | YES  |     | 0       | 是否是管理员  
 ----------+----------------------+------+-----+---------+---------
 

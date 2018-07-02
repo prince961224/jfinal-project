@@ -72,13 +72,13 @@ public abstract class BaseTopic<M extends BaseTopic<M>> extends Model<M> impleme
 		return get("pub_date");
 	}
 
-	public M setDeleted(Integer deleted) {
+	public M setDeleted(java.lang.Integer deleted) {
 		set("deleted", deleted);
 		return (M)this;
 	}
 	
-	public java.lang.Boolean getDeleted() {
-		return get("deleted");
+	public java.lang.Integer getDeleted() {
+		return getInt("deleted");
 	}
 
 }

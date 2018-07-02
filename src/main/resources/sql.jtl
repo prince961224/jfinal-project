@@ -45,14 +45,13 @@ LIMIT 1,25
 
 #回复内容信息
 #sql("getRepliesByTopicId")
-SELECT t_reply.*,
-t_user.`nickname` AS user_nickname ,
+SELECT t_reply.*,t_user.`nickname` AS user_nickname ,
 t_user.`avatar` AS user_avatar,
+t_user.`admin` AS user_admin,
 t_topic.`content` AS topic_content,
 t_topic.title AS topic_title
 FROM t_reply
 INNER JOIN t_user ON t_reply.`user_id`=t_user.`id`
 LEFT JOIN t_topic ON t_reply.`topic_id`=t_topic.`id`
-WHERE  topic_id = ?
+WHERE  t_reply.`deleted` = 0 AND topic_id = ?
 #end
-

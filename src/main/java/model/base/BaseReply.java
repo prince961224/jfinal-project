@@ -54,13 +54,13 @@ public abstract class BaseReply<M extends BaseReply<M>> extends Model<M> impleme
 		return get("pub_date");
 	}
 
-	public M setDeleted(java.lang.Boolean deleted) {
+	public M setDeleted(java.lang.Integer deleted) {
 		set("deleted", deleted);
 		return (M)this;
 	}
 	
-	public java.lang.Boolean getDeleted() {
-		return get("deleted");
+	public java.lang.Integer getDeleted() {
+		return getInt("deleted");
 	}
 
 }

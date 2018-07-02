@@ -11,14 +11,11 @@ public class Login implements Interceptor {
     @Override
     public void intercept(Invocation invocation) {
         Controller controller = invocation.getController();
-
         //登录
         if (controller.getSessionAttr("user") != null) {
             invocation.invoke();
         } else { //未登录则跳转到登录页面
             controller.redirect("/login");
         }
-
-
     }
 }

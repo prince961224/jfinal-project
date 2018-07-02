@@ -82,9 +82,10 @@
     </div>
 </nav>
 <@block name="content">
-<div class="ui grid container " id="main-container" style="margin-top:20px;">
-    <div class="twelve wides column">
-        <div class="ui rai sed segment">
+
+<div class="ui grid container eleven wides column " id="main-container" style="margin-top:20px;" >
+    <div class="twelve wides column" >
+        <div class="ui rai sed segment" >
             <div class="ui divided list">
                 <div>
                   <h2 style="color: #0ea432 " class="ui '黑体'" >热帖榜</h2>
@@ -111,9 +112,19 @@
                 </#list>
             </div>
         </div>
-    </div>
+   </div>
+    <#if (admin==1)>
+        <div class="ui three wides column " style=" float: right">
+            <div class="ui vertical menu">
+                <div class="item">
+                    <a href="${base}/category/list" class="blue ui blue button ">板块管理</a>
+                </div>
+            <#--<div class="item">B</div>
+            <div class="item">C</div>-->
+            </div>
+        </div>
+    </#if>
 </div>
-<div>
 </@block>
 <footer >
     <div>

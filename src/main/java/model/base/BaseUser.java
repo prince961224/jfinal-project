@@ -72,13 +72,13 @@ public abstract class BaseUser<M extends BaseUser<M>> extends Model<M> implement
 		return getStr("email");
 	}
 
-	public M setAdmin(java.lang.Boolean admin) {
+	public M setAdmin(java.lang.Integer admin) {
 		set("admin", admin);
 		return (M)this;
 	}
 	
-	public java.lang.Boolean getAdmin() {
-		return get("admin");
+	public java.lang.Integer getAdmin() {
+		return getInt("admin");
 	}
 
 }

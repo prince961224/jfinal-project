@@ -18,10 +18,15 @@ import java.util.List;
 public class MainController extends Controller {
     @Before(CategoryNabarInterceptor.class)
     public void index() {
-       renderFreeMarker("parent.ftl");
+        Integer admin =0;
+        setAttr("admin",admin);
+        renderFreeMarker("parent.ftl");
     }
     @Before({Login.class,CategoryNabarInterceptor.class})
     public void main() {
+        User user = getSessionAttr("user");
+        Integer admin= user.getAdmin();
+        setAttr("admin",admin);
         renderFreeMarker("parent.ftl");
     }
 
@@ -80,10 +85,10 @@ public class MainController extends Controller {
           return ;
       }else {
           User user = new User();
-          user.setUsername(email);
           user.setUsername(username);
           user.setPassword(password);
           user.setNickname(nickname);
+          user.setEmail(email);
           try {
               user.save();
               success = true;

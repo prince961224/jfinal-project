@@ -27,13 +27,13 @@ public abstract class BaseCategory<M extends BaseCategory<M>> extends Model<M> i
 		return getStr("name");
 	}
 
-	public M setDeleted(Integer deleted) {
+	public M setDeleted(java.lang.Integer deleted) {
 		set("deleted", deleted);
 		return (M)this;
 	}
 	
-	public java.lang.Boolean getDeleted() {
-		return get("deleted");
+	public java.lang.Integer getDeleted() {
+		return getInt("deleted");
 	}
 
 }

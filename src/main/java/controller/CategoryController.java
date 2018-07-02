@@ -11,13 +11,14 @@ import interceptor.CategoryNabarInterceptor;
 import interceptor.Login;
 import model.Category;
 import model.Topic;
+import model.User;
 import org.omg.CORBA.INTERNAL;
 
 import java.util.List;
 
 public class CategoryController extends Controller {
-   //显示板块里的所有内容：
-   // @Before(Login.class)
+   //登陆之后显示板块里的所有内容：
+    @Before(Login.class)
     public void list(){
          List<Category> categories= Category.dao.find("SELECT  * FROM t_category WHERE deleted = 0");
          setAttr("categories",categories);
@@ -48,20 +49,27 @@ public class CategoryController extends Controller {
     }
 
     //更新操作！
-    @Before({CategoryNabarInterceptor.class})
+    @Before({Login.class,CategoryNabarInterceptor.class})
     public void modify(){
       Integer id=  getParaToInt(0,-1);
-      Category category = Category.dao.findById(id);
-        if(category != null ){
-            setAttr("category",category);
-            renderFreeMarker("modify.ftl");
-        }else{
-            renderHtml("<h3>板块不存在！！</h3>");
+          Category category = Category.dao.findById(id);
+          User user = getSessionAttr("user");
+          String sql="SELECT t_user.* FROM t_user WHERE t_user.`admin`=1 AND t_user.`id`= ? ";
+      List<User> users = User.dao.find(sql,user.getId());
+      if(users.isEmpty()){
+          renderHtml("对不起，你没有这个权限！");
+      }else{
+          if(category != null ){
+              setAttr("category",category);
+              renderFreeMarker("modify.ftl");
+          }else{
+              renderHtml("<h3>板块不存在！！</h3>");
+            }
         }
     }
 
   //update
-    @Before({Login.class,CategoryFormValidator.class})
+  @Before({Login.class,CategoryFormValidator.class})
   public void update(){
         //固定操作取到板块的名称 和板块的id
       String name = getPara("name");
@@ -69,7 +77,6 @@ public class CategoryController extends Controller {
       Category category =new Category();
       category.setId(id);
       category.setName(name);
-
       Boolean success=false;
       try {
           success=true;
@@ -86,19 +93,28 @@ public class CategoryController extends Controller {
     public void delete(){
         Integer id=getParaToInt(0,-1);
         Integer deleted =1;
+        //Category设置属性
         Category category = new Category();
         category.setId(id);
         category.setDeleted(deleted);
+        //查询当前用户是否是管理员
+        User user = getSessionAttr("user");
+        String sql="SELECT t_user.* FROM t_user WHERE t_user.`admin`= 1 AND t_user.`id`= ? ";
+        List<User> users = User.dao.find(sql,user.getId());
+        //删除成功与否的标志
         Boolean success=false;
-        try {
-            success=true;
-            /*Category.dao.deleteById(id);*/
-            category.update();
-        }catch (Exception e){
-            LogKit.error("板块删除失败，原因是"+e.getMessage());
+        if( users.isEmpty() ){
+            renderHtml("对不起，你没有这个权限！");
+        }else{
+            try {
+                success=true;
+                category.update();
+            }catch (Exception e){
+                LogKit.error("板块删除失败，原因是"+e.getMessage());
+            }
+            String message=success ? "删除成功":"删除失败";
+            renderHtml(message + "</br><a href='/category/list'>返回板块列表</a>");
         }
-        String message=success ? "删除成功":"删除失败";
-        renderHtml(message + "</br><a href='/category/list'>返回板块列表</a>");
     }
 
     @Before(CategoryNabarInterceptor.class)
