@@ -5,10 +5,13 @@
 <@override name="content">
  <div class="ui grid container">
      <div class="ui centered twelve wide column " style="margin-top:100px;" >
-         <h2 class="header centered six wide column ">更新贴子名称</h2>
+         <h2 class="header centered six wide column ">更新贴子名称、内容</h2>
          <form  method="post" class="ui fluid form" id="category-form">
              <div class="field">
-                 <input type="text" name="name" placeholder="更新贴子名称" autocomplete="off" value="${topic.title}">
+                 <input type="text" name="name" placeholder="更新贴子名称" autocomplete="off" value="${topic.title}" />
+             </div>
+             <div>
+                 <input type="text" name="topic_content" id="topic_context" value="${topic.content}" >
              </div>
              <div class="ui error message"></div>
              <div class="ui field ten wide column" style="margin-bottom:339px">
@@ -28,12 +31,17 @@
             .form({
                         fields:{
                             name:{
-                                rules:[
-                                    {
+                                rules:[{
                                         type:'empty',
-                                        prompt:'版块名称不能为空'
+                                        prompt:'贴子名称不能为空'
                                     }
                                 ]
+                            },
+                            topic_content:{
+                                rules:[{
+                                    type:'empty',
+                                    prompt:'贴子名称不能为空'
+                                }]
                             }
                         }
                     }

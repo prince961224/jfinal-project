@@ -23,7 +23,7 @@ SELECT * FROM t_category WHERE deleted = 0
 ###获得热帖
 #sql("getHotTopics")
 SELECT
-	t_topic.*, IFNULL(t.reply_count, 0) AS reply_count,
+	t_topic.*, IFNULL(reply_count, 0) AS reply_count,
 	t_category. NAME AS category_name
 FROM
 	t_topic

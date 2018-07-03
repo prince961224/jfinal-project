@@ -48,6 +48,7 @@
                                      </div>
                                  </#if>
                              </div>
+
                 </#list>
                  <div style="text-align: center"  class="six wides" >
                      <#if page.getPageNumber() !=1 >

@@ -68,7 +68,8 @@
                 <i class="icon dropdown"></i>
                 <div class="menu">
                     <#if (session.user)??>
-                        <a href="${base}/logout" class="item">退出</a>
+                        <a href="${base}/logout" class="item">退出系统</a>
+                        <a href="${base}/user/change" class="item">修改信息</a>
                     <#else>
                         <a href="${base}/register" class="item">注册</a>
                         <a href="${base}/login" class="item">登录 </a>

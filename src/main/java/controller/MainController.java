@@ -70,7 +70,7 @@ public class MainController extends Controller {
 
     @Before(CategoryNabarInterceptor.class)
     public void register() {
-        renderFreeMarker("register.ftl");
+        renderFreeMarker("change_info.ftl");
     }
 
 
@@ -79,24 +79,37 @@ public class MainController extends Controller {
         String password = getPara("password");
         String nickname = getPara("nickname");
         String email = getPara("email");
+        String sql = "SELECT t_user.* FROM t_user WHERE t_user.`username` = ? ";
+        List<User> users = User.dao.find(sql, username);
         boolean success = false;
-      if(username.isEmpty()){
-          renderHtml("用户名为空");
-          return ;
-      }else {
-          User user = new User();
-          user.setUsername(username);
-          user.setPassword(password);
-          user.setNickname(nickname);
-          user.setEmail(email);
-          try {
-              user.save();
-              success = true;
-          } catch (Exception e) {
-              LogKit.error("用户注册失败，原因是:" + e.getMessage());
-          }
-      }
-       String message = success ?"注册成功":"注册失败";
+        String message="";
+        if(users.isEmpty()) {
+
+            if (username.isEmpty()) {
+                renderHtml("用户名为空");
+                return;
+            } else {
+                User user = new User();
+                user.setUsername(username);
+                user.setPassword(password);
+                user.setNickname(nickname);
+                user.setEmail(email);
+                try {
+                    user.save();
+                    success = true;
+                } catch (Exception e) {
+                    LogKit.error("用户注册失败，原因是:" + e.getMessage());
+                }
+            }
+
+        }else{
+            setAttr("errmsg", "用户名已经存在");
+            message="用户名已经存在";
+            Kv result = Kv.by("success", success).set("message", message);
+            renderJson(result);
+            return;
+        }
+        message = success ?"注册成功":"注册失败";
         Kv result = Kv.by("success", success).set("message", message);
         renderJson(result);
     }

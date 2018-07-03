@@ -27,8 +27,8 @@
                      <td>
                          <div style="text-align: center" class="ui center six ">
                                 <#if (session.user)??>
-                                    <a href="/topic/modify/${topic.id}" class="ui center blue button">更新贴子</a> |
-                                    <a href="/topic/delete/${topic.id}"class="ui center red button">删除贴子</a>
+                                    <a href="/topic/modify/${topic.id}-${topic.user_id}" class="ui center blue button">更新贴子</a> |
+                                    <a href="/topic/delete/${topic.id}-${topic.user_id}"class="ui center red button">删除贴子</a>
                                 <#else>
                                     <span style="color:red;">请<a href="${base}/login">登录</a>后再处理操作</span>
                                 </#if>
@@ -38,15 +38,18 @@
                      </#list>
                 </tbody>
             </table>
-            <div>
-                <#if page.getPageNumber() !=1 >
-                    <a href="?page=${page.getPageNumber()-1}">上一页</a>
-                 </#if>
-                ${page.getPageNumber()}/${page.getTotalPage()}
-                <#if page.getPageNumber() != page.getTotalPage() >
-                    <a href="?page=${page.getPageNumber()+1}">下一页</a>
-                </#if>
-            </div>
+                <div class="blue ui sex button" style="margin-right: 50px">
+                    <a href="${base}/topic/add_topics" style="text-align: center;color: greenyellow " > 发表帖子 </a>
+                </div>
+                <div class="blue ui sex" >
+                    <#if page.getPageNumber() !=1 >
+                        <a href="?page=${page.getPageNumber()-1}">上一页</a>
+                     </#if>
+                    ${page.getPageNumber()}/${page.getTotalPage()}
+                    <#if page.getPageNumber() != page.getTotalPage() >
+                        <a href="?page=${page.getPageNumber()+1}">下一页</a>
+                    </#if>
+                </div>
          </div>
     </div>
     </@override>
